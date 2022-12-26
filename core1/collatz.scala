@@ -23,11 +23,17 @@ def collatz_max(bnd: Long) : (Long, Long) = {
 }
 
 //(3)
-def is_pow_of_two(n: Long) : Boolean = ???
+def is_pow_of_two(n: Long) : Boolean = {
+    if (n == 0) false
+    else if (n & (n - 1) == 0) true
+    else false
+}
 
-def is_hard(n: Long) : Boolean = ???
+def is_hard(n: Long) : Boolean = is_pow_of_two(3 * n + 1)
 
-def last_odd(n: Long) : Long = ???
+def last_odd(n: Long) : Long = {
+    // last odd number in the series will be if is_hard is true
+}
 
 }
 
