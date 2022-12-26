@@ -15,7 +15,12 @@ def collatz(n: Long) : Long = {
 }
 
 //(2) 
-def collatz_max(bnd: Long) : (Long, Long) = ???
+def collatz_max(bnd: Long) : (Long, Long) = {
+    val step_list = (1L to bnd).toList.map(n => collatz(n))
+    val max_steps = step_list.max
+    val input_number = step_list.indexOf(max_steps) + 1
+    (max_steps, input_number)
+}
 
 //(3)
 def is_pow_of_two(n: Long) : Boolean = ???
