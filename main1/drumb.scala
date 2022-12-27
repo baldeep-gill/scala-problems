@@ -29,8 +29,13 @@ def get_first_price(symbol: String, year: Int) : Option[Double] = {
 
 
 // (3) 
-def get_prices(portfolio: List[String], years: Range) : List[List[Option[Double]]] = ???
-
+def get_prices(portfolio: List[String], years: Range) : List[List[Option[Double]]] = {
+    for (n <- years.toList) yield {
+        for (m <- portfolio) yield {
+            get_first_price(m, n)
+        }
+    }
+}
 
 
 // (4) 
