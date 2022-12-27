@@ -44,8 +44,14 @@ def get_delta(price_old: Option[Double], price_new: Option[Double]) : Option[Dou
 }
 
 
-// (5) 
-def get_deltas(data: List[List[Option[Double]]]) :  List[List[Option[Double]]] = ???
+// (5)
+def get_deltas(data: List[List[Option[Double]]]) :  List[List[Option[Double]]] = {
+    for (n <- data.sliding(2, 1).toList) yield {
+        for (m <- n.transpose) yield {
+            get_delta(m(0), m(1))
+        }
+    }
+}
 
 // (6) 
 def yearly_yield(data: List[List[Option[Double]]], balance: Long, index: Int) : Long = ???
