@@ -66,17 +66,23 @@ def sum_profits(deltas: List[Double], split_balance: Long) : Double = {
 
 
 // (7) 
-def compound_yield(data: List[List[Option[Double]]], balance: Long, index: Int) : Long = ???
+def compound_yield(data: List[List[Option[Double]]], balance: Long) : Long = {
+    if (data.isEmpty) balance
+    else compound_yield(data.tail, yearly_yield(data, balance, 0))
+}
 
-def investment(portfolio: List[String], years: Range, start_balance: Long) : Long = ???
+def investment(portfolio: List[String], years: Range, start_balance: Long) : Long = {
+    val raw_deltas = get_deltas(get_prices(portfolio, years))
+    start_balance + compound_yield(raw_deltas, start_balance)
+}
 
 
 
 
 //Test cases for the two portfolios given above
 
-//println("Real data: " + investment(rstate_portfolio, 1978 to 2019, 100))
-//println("Blue data: " + investment(blchip_portfolio, 1978 to 2019, 100))
+println("Real data: " + investment(rstate_portfolio, 1978 to 2019, 100))
+println("Blue data: " + investment(blchip_portfolio, 1978 to 2019, 100))
 
 
 }
