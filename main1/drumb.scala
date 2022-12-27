@@ -23,7 +23,9 @@ def get_january_data(symbol: String, year: Int) : List[String] = {
 
 
 // (2) 
-def get_first_price(symbol: String, year: Int) : Option[Double] = ???
+def get_first_price(symbol: String, year: Int) : Option[Double] = {
+    Try(Some(get_january_data(symbol, year).head.split(",").toList(1).toDouble)).getOrElse(None)
+}
 
 
 // (3) 
