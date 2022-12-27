@@ -18,8 +18,9 @@ import scala.util._
 
 // (1) 
 def get_january_data(symbol: String, year: Int) : List[String] = {
-    Try(Source.fromFile(s"${symbol}.csv")("ISO-8859-1").getLines().toList).getOrElse(List()).filter(_.startsWith("2014"))
+    Try(Source.fromFile(s"${symbol}.csv")("ISO-8859-1").getLines().toList).getOrElse(List()).filter(_.startsWith(s"${year}"))
 }
+println(get_january_data("GOOG", 1980) == List())
 
 
 // (2) 
