@@ -54,7 +54,15 @@ def get_deltas(data: List[List[Option[Double]]]) :  List[List[Option[Double]]] =
 }
 
 // (6) 
-def yearly_yield(data: List[List[Option[Double]]], balance: Long, index: Int) : Long = ???
+def yearly_yield(data: List[List[Option[Double]]], balance: Long, index: Int) : Long = {
+    val deltas = data(index).flatten
+    balance + sum_profits(deltas, balance/deltas.length).toLong
+}
+
+def sum_profits(deltas: List[Double], split_balance: Long) : Double = {
+    if (deltas.isEmpty) 0D 
+    else (deltas.head * split_balance) + sum_profits(deltas.tail, split_balance)
+}
 
 
 // (7) 
