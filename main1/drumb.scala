@@ -39,8 +39,9 @@ def get_prices(portfolio: List[String], years: Range) : List[List[Option[Double]
 
 
 // (4) 
-def get_delta(price_old: Option[Double], price_new: Option[Double]) : Option[Double] = ???
-
+def get_delta(price_old: Option[Double], price_new: Option[Double]) : Option[Double] = {
+    Try(Some((price_new.get - price_old.get)/price_old.get)).getOrElse(None)
+}
 
 
 // (5) 
