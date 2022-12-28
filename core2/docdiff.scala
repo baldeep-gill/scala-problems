@@ -12,7 +12,6 @@ def clean(s: String) : List[String] = {
     val reg = """\w+""".r
     reg.findAllIn(s).toList
 }
-println(clean("This is a sentence"))
 
 
 //(2)
@@ -22,7 +21,10 @@ def occurrences(xs: List[String]): Map[String, Int] = {
 
 
 //(3)
-def prod(lst1: List[String], lst2: List[String]) : Int = ???
+def prod(lst1: List[String], lst2: List[String]) : Int = {
+    val occur1 = occurrences(lst1)
+    val occur2 = occurrences(lst2)
+}
 
 
 //(4)
