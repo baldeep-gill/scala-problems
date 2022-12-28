@@ -25,9 +25,7 @@ def prod(lst1: List[String], lst2: List[String]) : Int = {
     val m1 = occurrences(lst1)
     val m2 = occurrences(lst2)
 
-    val common = m1.keySet & m2.keySet
-
-    common.map(n => m1.getOrElse(n, 0) * m2.getOrElse(n, 0)).sum
+    (m1.keySet & m2.keySet).toList.map(n => m1.getOrElse(n, 0) * m2.getOrElse(n, 0)).sum
 }
 
 
