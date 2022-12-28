@@ -46,17 +46,21 @@ def get_delta(price_old: Option[Double], price_new: Option[Double]) : Option[Dou
 
 // (5)
 def get_deltas(data: List[List[Option[Double]]]) :  List[List[Option[Double]]] = {
-    for (n <- data.sliding(2, 1).toList) yield {
-        for (m <- n.transpose) yield {
-            get_delta(m(0), m(1))
+    if (data.length > 1) {
+        for (n <- data.sliding(2, 1).toList) yield {
+            for (m <- n.transpose) yield {
+                get_delta(m(0), m(1))
+            }
         }
-    }
+    } else List(List(None))
+    
 }
 
 // (6) 
 def yearly_yield(data: List[List[Option[Double]]], balance: Long, index: Int) : Long = {
     val deltas = data(index).flatten
-    balance + sum_profits(deltas, balance/deltas.length).toLong
+    if (deltas.isEmpty) balance
+    else balance + sum_profits(deltas, balance/deltas.length).toLong
 }
 
 def sum_profits(deltas: List[Double], split_balance: Long) : Double = {
@@ -66,17 +70,23 @@ def sum_profits(deltas: List[Double], split_balance: Long) : Double = {
 
 
 // (7) 
+def single_yield(data: List[Option[Double]], balance: Long): Long = {
+    val deltas = data.flatten
+    if (deltas.isEmpty) balance
+    else balance + sum_profits(deltas, (balance/deltas.length.toLong)).toLong
+}
+
 def compound_yield(data: List[List[Option[Double]]], balance: Long) : Long = {
     if (data.isEmpty) balance
-    else compound_yield(data.tail, yearly_yield(data, balance, 0))
+    else compound_yield(data.tail, single_yield(data.head, balance))
 }
 
 def investment(portfolio: List[String], years: Range, start_balance: Long) : Long = {
     val raw_deltas = get_deltas(get_prices(portfolio, years))
-    start_balance + compound_yield(raw_deltas, start_balance)
+    compound_yield(raw_deltas, start_balance)
 }
 
-
+println(investment(List("GOOG", "AAPL", "BIDU"), 2000 to 2000, 100) == 100)
 
 
 //Test cases for the two portfolios given above
