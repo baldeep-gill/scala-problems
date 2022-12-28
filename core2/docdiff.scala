@@ -22,8 +22,12 @@ def occurrences(xs: List[String]): Map[String, Int] = {
 
 //(3)
 def prod(lst1: List[String], lst2: List[String]) : Int = {
-    val occur1 = occurrences(lst1)
-    val occur2 = occurrences(lst2)
+    val m1 = occurrences(lst1)
+    val m2 = occurrences(lst2)
+
+    val common = m1.keySet & m2.keySet
+
+    common.map(n => m1.getOrElse(n, 0) * m2.getOrElse(n, 0)).sum
 }
 
 
