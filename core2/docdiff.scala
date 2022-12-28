@@ -16,7 +16,9 @@ println(clean("This is a sentence"))
 
 
 //(2)
-def occurrences(xs: List[String]): Map[String, Int] = ???
+def occurrences(xs: List[String]): Map[String, Int] = {
+    xs.distinct.map(ch => (ch, xs.count(_ == ch))).toList.toMap
+}
 
 
 //(3)
