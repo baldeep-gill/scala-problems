@@ -30,7 +30,9 @@ def prod(lst1: List[String], lst2: List[String]) : Int = {
 
 
 //(4)
-def overlap(lst1: List[String], lst2: List[String]) : Double = ???
+def overlap(lst1: List[String], lst2: List[String]) : Double = {
+    (prod(lst1, lst2)).toDouble / (List(prod(lst1, lst1), prod(lst2, lst2)).max).toDouble
+}
 
 def similarity(s1: String, s2: String) : Double = ???
 
