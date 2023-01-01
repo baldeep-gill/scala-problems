@@ -66,7 +66,22 @@ def syard(toks: Toks, st: Toks = Nil, out: Toks = Nil) : Toks = toks match {
 
  
 // (2) 
-def compute(toks: Toks, st: List[Int] = Nil) : Int = ???
+def compute(toks: Toks, stack: List[Int] = Nil) : Int = toks match {
+	case Nil if stack.isEmpty
+		=> 0
+	case Nil
+		=> stack.head
+	case head::tail if head == "+"
+		=> compute(tail, (stack.tail.head + stack.head)::stack.tail.tail)
+	case head::tail if head == "-"
+		=> compute(tail, (stack.tail.head - stack.head)::stack.tail.tail)
+	case head::tail if head == "*"
+		=> compute(tail, (stack.tail.head * stack.head)::stack.tail.tail)
+	case head::tail if head == "/"
+		=> compute(tail, (stack.tail.head / stack.head)::stack.tail.tail)
+	case head::tail if head.forall(_.isDigit)
+		=> compute(tail, head.toInt::stack)
+}
 
 
 // test cases
