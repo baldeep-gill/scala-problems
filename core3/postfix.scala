@@ -11,10 +11,12 @@ type Toks = List[String]
 val ops = List("+", "-", "*", "/")
 
 // the precedences of the operators
-val precs = Map("+" -> 1,
-		"-" -> 1,
-		"*" -> 2,
-		"/" -> 2)
+val precs = Map(
+	"+" -> 1,
+	"-" -> 1,
+	"*" -> 2,
+	"/" -> 2
+)
 
 // helper function for splitting strings into tokens
 def split(s: String) : Toks = s.split(" ").toList
