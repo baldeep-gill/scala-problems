@@ -24,10 +24,27 @@ def split(s: String) : Toks = s.split(" ").toList
 
 
 // (1) 
-def is_op(op: String) : Boolean = ???
-def prec(op1: String, op2: String) : Boolean = ???
+def is_op(op: String) : Boolean = {
+	ops.contains(op)
+}
 
-def syard(toks: Toks, st: Toks = Nil, out: Toks = Nil) : Toks = ???
+// returns true if op1 is of the same or higher precedence  
+def prec(op1: String, op2: String) : Boolean = precs.getOrElse(op1, 0) >= precs.getOrElse(op2, 0)
+
+def syard(toks: Toks, st: Toks = Nil, out: Toks = Nil) : Toks = toks match {
+	case Nil if st.isEmpty
+		=> out
+	case head :: tail if head.forall(_.isDigit) 
+		=> syard(tail, st, out ++ List(head))
+	case head :: tail if head.is_op && (st.isEmpty || !prec(st(0), head))	// if the stack is empty OR if input operator is of higher precedence
+		=> syard(tail, head::st, out)
+	case head :: tail if head.is_op //&& prec(st(0), head) // previous statement should catch other cases
+		=> syard(tail, st.tail, out ++ List(st(0)))
+	case head :: tail if head == "("
+		=> syard(toks, head::st, out)
+	case head :: tail if head == ")"
+		=> syard(toks, st.tail, )
+}
 
 
 // test cases
