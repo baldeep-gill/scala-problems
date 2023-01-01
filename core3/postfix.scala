@@ -34,16 +34,20 @@ def prec(op1: String, op2: String) : Boolean = precs.getOrElse(op1, 0) >= precs.
 def syard(toks: Toks, st: Toks = Nil, out: Toks = Nil) : Toks = toks match {
 	case Nil if st.isEmpty
 		=> out
+	case Nil
+		=> syard(Nil, st.tail, out ++ List(st.head))
 	case head :: tail if head.forall(_.isDigit) 
 		=> syard(tail, st, out ++ List(head))
-	case head :: tail if head.is_op && (st.isEmpty || !prec(st(0), head))	// if the stack is empty OR if input operator is of higher precedence
+	case head :: tail if is_op(head) && (st.isEmpty || !prec(st(0), head))	// if the stack is empty OR if input operator is of higher precedence
 		=> syard(tail, head::st, out)
-	case head :: tail if head.is_op //&& prec(st(0), head) // previous statement should catch other cases
-		=> syard(tail, st.tail, out ++ List(st(0)))
+	case head :: tail if is_op(head) //&& prec(st(0), head) // previous statement should catch other cases
+		=> syard(tail, head::st.tail, out ++ List(st(0)))
 	case head :: tail if head == "("
-		=> syard(toks, head::st, out)
+		=> syard(tail, head::st, out)
+	case head :: tail if head == ")" && st.head != "("
+		=> syard(toks, st.tail, out ++ List(st.head))
 	case head :: tail if head == ")"
-		=> syard(toks, st.tail, )
+		=> syard(tail, st.tail, out)
 }
 
 
