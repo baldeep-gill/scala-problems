@@ -12,14 +12,27 @@ import scala.util._
 
 
 //(1)
-def get_wordle_list(url: String) : List[String] = ???
+def get_wordle_list(url: String) : List[String] = {
+    Source.fromURL("https://nms.kcl.ac.uk/christian.urban/wordle.txt").getLines().toList
+}
 
 // val secrets = get_wordle_list("https://nms.kcl.ac.uk/christian.urban/wordle.txt")
 // secrets.length // => 12972
 // secrets.filter(_.length != 5) // => Nil
 
 //(2)
-def removeN[A](xs: List[A], elem: A, n: Int) : List[A] = ???
+def removeN[A](xs: List[A], elem: A, n: Int) : List[A] = {
+    xs match {
+        case Nil => List()
+        case head :: tail if !xs.contains(elem) => xs
+        case head :: tail if n >= xs.count(_ == elem) => xs.filter(_ != elem)
+        case head :: tail if n > 0 && head != elem
+            => head::removeN(tail, elem, n)
+        case head :: tail if n > 0 && head == elem
+            => removeN(tail, elem, n - 1)
+        case _ if n == 0 => xs
+    }
+}
 
 
 // removeN(List(1,2,3,2,1), 3, 1)  // => List(1, 2, 2, 1)
