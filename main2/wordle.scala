@@ -13,7 +13,7 @@ import scala.util._
 
 //(1)
 def get_wordle_list(url: String) : List[String] = {
-    Source.fromURL("https://nms.kcl.ac.uk/christian.urban/wordle.txt").getLines().toList
+    Try(Source.fromURL(url).getLines().toList).getOrElse(Nil)
 }
 
 // val secrets = get_wordle_list("https://nms.kcl.ac.uk/christian.urban/wordle.txt")
@@ -47,9 +47,22 @@ case object Present extends Tip
 case object Correct extends Tip
 
 
-def pool(secret: String, word: String) : List[Char] = ??? 
+def pool(secret: String, word: String) : List[Char] = {
+    def helper(str1: List[Char], str2: List[Char]) : List[Char] = str1 match {
+        case Nil => List()
+        case head :: tail if head == str2.head => helper(tail, str2.tail)
+        case head :: tail if head != str2. head => head::helper(tail, str2.tail)
+        case _ if str2 == Nil => str1
+    }
+    helper(secret.toList, word.toList)
+}
 
-def aux(secret: List[Char], word: List[Char], pool: List[Char]) : List[Tip] = ???
+def aux(secret: List[Char], word: List[Char], pool: List[Char]) : List[Tip] = {
+    def helper(secret: List[Char], word: List[Char], pool: List[Char], tips: List[Tips] = Nil) = secret match {
+        case Nil => List()
+        case head :: tail if head == word.head => 
+    } 
+}
 
 def score(secret: String, word: String) : List[Tip] = ???
 
