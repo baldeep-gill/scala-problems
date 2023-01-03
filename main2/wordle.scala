@@ -111,7 +111,8 @@ def evil(secrets: List[String], word: String) = lowest(secrets, word, Int.MaxVal
 //evil(secrets, "house").length
 
 // (6)
-def frequencies(secrets: List[String]) : Map[Char, Double] = ???
+def frequencies(secrets: List[String]) : Map[Char, Double] = (for(n <- ('a' to 'z').toList) yield (n -> (1D - (secrets.flatten.count(_ == n).toDouble / secrets.flatten.length.toDouble)))).toMap
+
 
 // (7)
 def rank(frqs: Map[Char, Double], s: String) = ???
