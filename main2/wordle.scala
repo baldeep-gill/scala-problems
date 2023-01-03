@@ -101,7 +101,7 @@ def lowest(secrets: List[String], word: String, current: Int, acc: List[String])
     case Nil => acc
 }
 
-def evil(secrets: List[String], word: String) = lowest(secrets, word, Int.MaxValue, Nil)
+def evil(secrets: List[String], word: String) : List[String] = lowest(secrets, word, Int.MaxValue, Nil)
 
 
 //evil(secrets, "stent").length
@@ -115,9 +115,22 @@ def frequencies(secrets: List[String]) : Map[Char, Double] = (for(n <- ('a' to '
 
 
 // (7)
-def rank(frqs: Map[Char, Double], s: String) = ???
+def rank(frqs: Map[Char, Double], s: String) : Double = s.toList.map(x => frqs.getOrElse(x, 1D)).sum
 
-def ranked_evil(secrets: List[String], word: String) = ???
+
+def ranked_evil(secrets: List[String], word: String) : List[String] = {
+    val frqs = frequencies(secrets)
+    def helper(evils: List[String], current: Double, acc: List[String]) : List[String] = evils match {
+        case head :: tail if rank(frqs, head) == current
+            => helper(tail, current, acc :+ head)
+        case head :: tail if rank(frqs, head) > current
+            => helper(tail, rank(frqs, head), List(head))
+        case head :: tail if rank(frqs, head) < current
+            => helper(tail, current, acc)
+        case Nil => acc
+    }
+    helper(evil(secrets, word), Double.MinValue, Nil)
+}
 
 
 }
