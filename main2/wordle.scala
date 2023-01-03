@@ -51,20 +51,26 @@ def pool(secret: String, word: String) : List[Char] = {
     def helper(str1: List[Char], str2: List[Char]) : List[Char] = str1 match {
         case Nil => List()
         case head :: tail if head == str2.head => helper(tail, str2.tail)
-        case head :: tail if head != str2. head => head::helper(tail, str2.tail)
+        case head :: tail if head != str2.head => head::helper(tail, str2.tail)
         case _ if str2 == Nil => str1
     }
     helper(secret.toList, word.toList)
 }
 
 def aux(secret: List[Char], word: List[Char], pool: List[Char]) : List[Tip] = {
-    def helper(secret: List[Char], word: List[Char], pool: List[Char], tips: List[Tips] = Nil) = secret match {
+    def helper(secret: List[Char], word: List[Char], pool: List[Char], tips: List[Tip] = Nil) : List[Tip] = word match {
+        case head :: tail if head == secret.head => helper(secret.tail, tail, pool, Correct::tips)
+        case head :: tail if pool.contains(head) => helper(secret.tail, tail, removeN(pool, head, 1), Present::tips)
+        case head :: tail => helper(secret.tail, tail, pool, Absent::tips)
+        case _ if word == Nil => tips.reverse
         case Nil => List()
-        case head :: tail if head == word.head => 
-    } 
+    }
+    helper(secret, word, pool)
 }
 
-def score(secret: String, word: String) : List[Tip] = ???
+def score(secret: String, word: String) : List[Tip] = {
+    aux(secret.toList, word.toList, pool(secret, word))
+}
 
 
 // score("chess", "caves") // => List(Correct, Absent, Absent, Present, Correct)
