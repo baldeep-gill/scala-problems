@@ -79,9 +79,13 @@ def score(secret: String, word: String) : List[Tip] = {
 // score("chess", "eexss") // => List(Present, Absent, Absent, Correct, Correct)
 
 // (4)
-def eval(t: Tip) : Int = ???
+def eval(t: Tip) : Int = t match {
+    case Correct => 10
+    case Present => 1
+    case Absent => 0
+}
 
-def iscore(secret: String, word: String) : Int = ???
+def iscore(secret: String, word: String) : Int = score(secret, word).map(x => eval(x)).sum
 
 //iscore("chess", "caves") // => 21
 //iscore("chess", "swiss") // => 20
