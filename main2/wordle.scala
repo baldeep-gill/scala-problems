@@ -91,9 +91,17 @@ def iscore(secret: String, word: String) : Int = score(secret, word).map(x => ev
 //iscore("chess", "swiss") // => 20
 
 // (5)
-def lowest(secrets: List[String], word: String, current: Int, acc: List[String]) : List[String] = ???
+def lowest(secrets: List[String], word: String, current: Int, acc: List[String]) : List[String] = secrets match {
+    case head :: tail if iscore(head, word) == current
+        => lowest(tail, word, current, acc :+ head)
+    case head :: tail if iscore(head, word) < current 
+        => lowest(tail, word, iscore(head, word), List(head))
+    case head :: tail if iscore(head, word) > current
+        => lowest(tail, word, current, acc)
+    case Nil => acc
+}
 
-def evil(secrets: List[String], word: String) = ???
+def evil(secrets: List[String], word: String) = lowest(secrets, word, Int.MaxValue, Nil)
 
 
 //evil(secrets, "stent").length
