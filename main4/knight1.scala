@@ -18,7 +18,9 @@ type Path = List[Pos]    // a path...a list of positions
 
 
 //(1) 
-def is_legal(dim: Int, path: Path, x: Pos) : Boolean = ???
+def is_legal(dim: Int, path: Path, x: Pos) : Boolean = {
+	!path.contains(x) && (x._1 < dim && x._1 > -1) && (x._2 < dim && x._2 > -1)
+}
 
 
 //(2) 
