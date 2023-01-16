@@ -32,18 +32,26 @@ def legal_moves(dim: Int, path: Path, x: Pos) : List[Pos] = {
 
 //some testcases
 //
-//assert(legal_moves(8, Nil, (2,2)) == 
-//  List((3,4), (4,3), (4,1), (3,0), (1,0), (0,1), (0,3), (1,4)))
-//assert(legal_moves(8, Nil, (7,7)) == List((6,5), (5,6)))
-//assert(legal_moves(8, List((4,1), (1,0)), (2,2)) == 
-//  List((3,4), (4,3), (3,0), (0,1), (0,3), (1,4)))
-//assert(legal_moves(8, List((6,6)), (7,7)) == List((6,5), (5,6)))
+// legal_moves(8, Nil, (2,2)) == List((3,4), (4,3), (4,1), (3,0), (1,0), (0,1), (0,3), (1,4))
+// legal_moves(8, Nil, (7,7)) == List((6,5), (5,6))
+// legal_moves(8, List((4,1), (1,0)), (2,2)) == List((3,4), (4,3), (3,0), (0,1), (0,3), (1,4))
+// legal_moves(8, List((6,6)), (7,7)) == List((6,5), (5,6))
 
 
 // (3) 
-def count_tours(dim: Int, path: Path) : Int = ???
+def count_tours(dim: Int, path: Path) : Int = {
+	val moves = legal_moves(dim, path, path.head).map(x => count_tours(dim, x::path))
+	if(path.size == dim * dim) 1
+	else if(moves.size == 0) 0
+	else moves.sum
+}
 
-def enum_tours(dim: Int, path: Path) : List[Path] = ???
+def enum_tours(dim: Int, path: Path) : List[Path] = {
+	val moves = legal_moves(dim, path, path.head).map(x => enum_tours(dim, x::path))
+	if(path.size == dim * dim) List(path)
+	else if(moves.size == 0) Nil
+	else moves.flatten
+}
 
 // (4) 
 def first(xs: List[Pos], f: Pos => Option[Path]) : Option[Path] = ???
