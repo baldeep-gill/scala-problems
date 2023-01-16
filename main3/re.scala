@@ -62,18 +62,31 @@ def nullable (r: Rexp) : Boolean = r match {
 	case ALTs(rs) => rs match {
 		case Nil => false
 		case x::xs if nullable(x) => true
-		case x::xs => nullable(xs)
+		case x::xs => nullable(ALTs(xs))
 	}
 	case SEQs(rs) => rs match {
 		case Nil => true
-		case x::xs if nullable(x) => nullable(xs)
+		case x::xs if nullable(x) => nullable(SEQs(xs))
 		case _ => false
 	}
 	case STAR(r) => true
 }
 
 // (2) 
-def der (c: Char, r: Rexp) : Rexp = ???
+def der (c: Char, r: Rexp) : Rexp = r match {
+	case ZERO => ZERO
+	case ONE => ZERO
+	case CHAR(d) => if (c == d) ONE else ZERO
+	case ALTs(rs) => rs match {
+		case x::xs => ALTs(der(c, x) :: der(c, xs))
+	}
+	case SEQs(rs) => rs match {
+		case Nil => ZERO
+		case x::xs if nullable(x) => ALT(SEQs(der(c, x) :: xs), der(c, SEQs(xs)))
+		case _ => SEQs(der(c, x) :: xs)
+	}
+	case STAR(r) => SEQ(der(c, r), STAR(r))
+}
 
 // (3) 
 def denest(rs: List[Rexp]) : List[Rexp] = ???
