@@ -87,7 +87,12 @@ def der (c: Char, r: Rexp) : Rexp = r match {
 }
 
 // (3) 
-def denest(rs: List[Rexp]) : List[Rexp] = ???
+def denest(rs: List[Rexp]) : List[Rexp] = rs match {
+	case Nil => Nil
+	case ZERO::rest => denest(rest)
+	case ALTs(xs)::rest => xs ++ denest(rest)
+	case x::rest => x::denest(rest)
+}
 
 // (4)
 def flts(rs: List[Rexp], acc: List[Rexp] = Nil) : List[Rexp] = ???
