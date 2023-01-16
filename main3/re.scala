@@ -118,7 +118,11 @@ def SEQs_smart(rs: List[Rexp]) : Rexp = rs match {
 }
 
 // (6)
-def simp(r: Rexp) : Rexp = ???
+def simp(r: Rexp) : Rexp = r match {
+	case ALTs(rs) => ALTs_smart(denest(rs.map(x => simp(x))).distinct)
+	case SEQs(rs) => SEQs_smart(flts(rs.map(x => simp(x))))
+	case _ => r
+}
 
 // (7)
 def ders (s: List[Char], r: Rexp) : Rexp = ???
