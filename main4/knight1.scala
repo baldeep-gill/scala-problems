@@ -54,15 +54,19 @@ def enum_tours(dim: Int, path: Path) : List[Path] = {
 }
 
 // (4) 
-def first(xs: List[Pos], f: Pos => Option[Path]) : Option[Path] = ???
+def first(xs: List[Pos], f: Pos => Option[Path]) : Option[Path] = xs match {
+	case Nil => None
+	case x::xs if f(x) != None => f(x)
+	case x::xs => first(xs, f)
+}
 
 
 // testcases
 //
-//def foo(x: (Int, Int)) = if (x._1 > 3) Some(List(x)) else None
-//
-//first(List((1, 0),(2, 0),(3, 0),(4, 0)), foo)   // Some(List((4,0)))
-//first(List((1, 0),(2, 0),(3, 0)), foo)          // None
+// def foo(x: (Int, Int)) = if (x._1 > 3) Some(List(x)) else None
+
+// first(List((1, 0),(2, 0),(3, 0),(4, 0)), foo)   // Some(List((4,0)))
+// first(List((1, 0),(2, 0),(3, 0)), foo)          // None
 
 
 //(5) 
