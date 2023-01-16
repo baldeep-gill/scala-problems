@@ -55,7 +55,22 @@ implicit def stringOps (s: String) = new {
 //======================
 
 // (1)
-def nullable (r: Rexp) : Boolean = ???
+def nullable (r: Rexp) : Boolean = r match {
+	case ZERO => false
+	case ONE => true
+	case CHAR(c) => false
+	case ALTs(rs) => rs match {
+		case Nil => false
+		case x::xs if nullable(x) => true
+		case x::xs => nullable(xs)
+	}
+	case SEQs(rs) => rs match {
+		case Nil => true
+		case x::xs if nullable(x) => nullable(xs)
+		case _ => false
+	}
+	case STAR(r) => true
+}
 
 // (2) 
 def der (c: Char, r: Rexp) : Rexp = ???
