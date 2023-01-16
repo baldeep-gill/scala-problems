@@ -104,8 +104,18 @@ def flts(rs: List[Rexp], acc: List[Rexp] = Nil) : List[Rexp] = rs match {
 }
 
 // (5)
-def ALTs_smart(rs: List[Rexp]) : Rexp = ???
-def SEQs_smart(rs: List[Rexp]) : Rexp = ???
+def ALTs_smart(rs: List[Rexp]) : Rexp = rs match {
+	case Nil => ZERO
+	case r::Nil => r
+	case _ => ALTs(rs)
+}
+
+def SEQs_smart(rs: List[Rexp]) : Rexp = rs match {
+	case Nil => ONE
+	case ZERO::Nil => ZERO
+	case r::Nil => r
+	case _ => SEQs(rs)
+}
 
 // (6)
 def simp(r: Rexp) : Rexp = ???
