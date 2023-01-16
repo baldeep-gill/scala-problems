@@ -24,7 +24,10 @@ def is_legal(dim: Int, path: Path, x: Pos) : Boolean = {
 
 
 //(2) 
-def legal_moves(dim: Int, path: Path, x: Pos) : List[Pos] = ???
+def legal_moves(dim: Int, path: Path, x: Pos) : List[Pos] = {
+	val move_deltas = List((1, 2), (2, 1), (2, -1), (1, -2), (-1, -2), (-2, -1), (-2, 1), (-1, 2))
+	move_deltas.map{ case (k, v) => (k + x._1, v + x._2) }.filter(is_legal(dim, path, _))
+}
 
 
 //some testcases
