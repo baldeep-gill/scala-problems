@@ -125,8 +125,12 @@ def simp(r: Rexp) : Rexp = r match {
 }
 
 // (7)
-def ders (s: List[Char], r: Rexp) : Rexp = ???
-def matcher(r: Rexp, s: String): Boolean = ???
+def ders (s: List[Char], r: Rexp) : Rexp = s match {
+	case Nil => r
+	case c::cs => ders(cs, simp(der(c, r)))
+}
+
+def matcher(r: Rexp, s: String): Boolean = nullable(ders(s.toList, r))
 
 // (8) 
 def size(r: Rexp): Int = ???
