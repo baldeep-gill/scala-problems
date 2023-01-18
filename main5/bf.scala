@@ -72,8 +72,8 @@ def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
             case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
             case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
             case x if x == '.' => {
-                compute(prog, pc + 1, mp, mem)
                 println(sread(mem, mp).toChar)
+                compute(prog, pc + 1, mp, mem)
             }
             case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
             case x if x == '[' => compute(prog, pc + 1, mp, mem)
