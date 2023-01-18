@@ -26,9 +26,29 @@ def write(mem: Mem, mp: Int, v: Int) : Mem = mem + (mp -> v)
 
 // (3) 
 
-def jumpRight(prog: String, pc: Int, level: Int) : Int = ???
+def jumpRight(prog: String, pc: Int, level: Int) : Int = {
+    if (pc == prog.length) pc
+    else {
+        prog(pc) match {
+            case x if x == '[' => jumpRight(prog, pc + 1, level + 1)
+            case x if (x == ']' && level > 0) => jumpRight(prog, pc + 1, level - 1)
+            case x if x == ']' => pc + 1
+            case x => jumpRight(prog, pc + 1, level)
+        }
+    }
+}
 
-def jumpLeft(prog: String, pc: Int, level: Int) : Int = ???
+def jumpLeft(prog: String, pc: Int, level: Int) : Int = {
+    if (pc == -1) pc
+    else {
+        prog(pc) match {
+            case x if x == ']' => jumpLeft(prog, pc - 1, level + 1)
+            case x if (x == '[' && level > 0) => jumpLeft(prog, pc - 1, level - 1)
+            case x if x == '[' => pc + 1
+            case x => jumpLeft(prog, pc - 1, level)
+        }
+    }
+}
 
 
 // testcases
