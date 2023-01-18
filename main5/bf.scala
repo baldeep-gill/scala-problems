@@ -20,9 +20,9 @@ def load_bff(name: String) : String = Try(Source.fromFile(name).mkString).getOrE
 
 // (2) 
 
-def sread(mem: Mem, mp: Int) : Int = ???
+def sread(mem: Mem, mp: Int) : Int = mem.getOrElse(mp, 0)
 
-def write(mem: Mem, mp: Int, v: Int) : Mem = ???
+def write(mem: Mem, mp: Int, v: Int) : Mem = mem + (mp -> v)
 
 // (3) 
 
