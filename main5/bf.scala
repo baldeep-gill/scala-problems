@@ -16,7 +16,7 @@ import scala.util._
 //======================
 
 // (1)
-def load_bff(name: String) : String = ???
+def load_bff(name: String) : String = Try(Source.fromFile(name).mkString).getOrElse("")
 
 // (2) 
 
