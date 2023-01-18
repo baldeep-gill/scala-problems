@@ -63,7 +63,26 @@ def jumpLeft(prog: String, pc: Int, level: Int) : Int = {
 
 // (4) 
 
-def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = ???
+def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
+    if (pc == prog.length) mem
+    else {
+        prog(pc) match {
+            case x if x == '>' => compute(prog, pc + 1, mp + 1, mem)
+            case x if x == '<' => compute(prog, pc + 1, mp - 1, mem)
+            case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case x if x == '.' => {
+                compute(prog, pc + 1, mp, mem)
+                println(sread(mem, mp).toChar)
+            }
+            case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+            case x if x == '[' => compute(prog, pc + 1, mp, mem)
+            case x if x == ']' && sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+            case x if x == ']' => compute(prog, pc + 1, mp, mem)
+            case x => compute(prog, pc + 1, mp, mem)
+        }
+    }
+}
 
 def run(prog: String, m: Mem = Map()) = ???
 
