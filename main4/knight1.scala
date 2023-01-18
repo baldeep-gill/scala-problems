@@ -70,7 +70,17 @@ def first(xs: List[Pos], f: Pos => Option[Path]) : Option[Path] = xs match {
 
 
 //(5) 
-def first_tour(dim: Int, path: Path) : Option[Path] = ???
+def first_tour(dim: Int, path: Path) : Option[Path] = {
+	def foo(position: Pos) : Option[Path] = {
+		first_tour(dim, position::path)
+	}
+	if(path.size == dim * dim) Some(path)
+	else {
+		val moves = legal_moves(dim, path, path.head)
+		if(moves.size == 0) None
+		else first(moves, foo)
+	}
+}
  
 
 
