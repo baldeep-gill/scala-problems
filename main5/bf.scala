@@ -72,7 +72,7 @@ def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
             case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
             case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
             case x if x == '.' => {
-                println(sread(mem, mp).toChar)
+                print(sread(mem, mp).toChar)
                 compute(prog, pc + 1, mp, mem)
             }
             case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
@@ -84,7 +84,7 @@ def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
     }
 }
 
-def run(prog: String, m: Mem = Map()) = ???
+def run(prog: String, m: Mem = Map()) : Mem = compute(prog, 0, 0, m)
 
 // (5)
 def generate(msg: List[Char]) : String = ???
@@ -117,16 +117,13 @@ def generate(msg: List[Char]) : String = ???
 //-----------------------------
 
 // hello world program 1
-//run("""++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++
-//       ..+++.>>.<-.<.+++.------.--------.>>+.>++.""")
+//run("""++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.""")
 
 // hello world program 2
-//run("""++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>+
-//       +.<<+++++++++++++++.>.+++.------.--------.>+.>.""")
+//run("""++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.""")
 
 // hello world program 3
-//run("""+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..
-//       +++.>-.------------.<++++++++.--------.+++.------.--------.>+.""")
+//run("""+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.""")
 
  
 // draws the Sierpinski triangle
