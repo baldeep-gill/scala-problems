@@ -217,27 +217,27 @@ def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = 
 	if (pc == pg.length) mem
     else {
         pg(pc) match {
-            case '>' => compute3(pg, tb, pc + 2, mp + (pg(pc + 1).toInt - 64), mem)
-            case '<' => compute3(pg, tb, pc + 2, mp - (pg(pc + 1).toInt - 64), mem)
-            case '+' => compute3(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).toInt - 64)))
-            case '-' => compute3(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).toInt - 64)))
+            case '>' => compute4(pg, tb, pc + 2, mp + (pg(pc + 1).toInt - 64), mem)
+            case '<' => compute4(pg, tb, pc + 2, mp - (pg(pc + 1).toInt - 64), mem)
+            case '+' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).toInt - 64)))
+            case '-' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).toInt - 64)))
             case '.' => {
                 print(sread(mem, mp).toChar)
-                compute3(pg, tb, pc + 1, mp, mem)
+                compute4(pg, tb, pc + 1, mp, mem)
             }
-            case '[' if sread(mem, mp) == 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
-            case '[' => compute3(pg, tb, pc + 1, mp, mem)
-            case ']' if sread(mem, mp) != 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
-            case ']' => compute3(pg, tb, pc + 1, mp, mem)
-			case '0' => compute3(pg, tb, pc + 1, mp, write(mem, mp, 0))
-            case x => compute3(pg, tb, pc + 1, mp, mem)
+            case '[' if sread(mem, mp) == 0 => compute4(pg, tb, sread(tb, pc), mp, mem)
+            case '[' => compute4(pg, tb, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute4(pg, tb, sread(tb, pc), mp, mem)
+            case ']' => compute4(pg, tb, pc + 1, mp, mem)
+			case '0' => compute4(pg, tb, pc + 1, mp, write(mem, mp, 0))
+            case x => compute4(pg, tb, pc + 1, mp, mem)
         }
     }
 }
 
 // should call first optimise and then combine on the input string
 //
-def run4(pg: String, m: Mem = Map()) = compute3(combine(optimise(pg)), jtable(pg), 0, 0, m)
+def run4(pg: String, m: Mem = Map()) = compute4(combine(optimise(pg)), jtable(combine(optimise(pg))), 0, 0, m)
 
 
 // testcases
