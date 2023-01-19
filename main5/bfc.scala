@@ -183,23 +183,61 @@ def run3(pg: String, m: Mem = Map()) = compute3(pg, jtable(pg), 0, 0, m)
 // run3 = 11.349253759
 
 // (8)
-// A is 65 in ASCII - maybe make offset 'length + 64'
-// + - < >
-def combine(s: String) : String = {
-	def helper(s: String, token: Char, length: Int, processed: String = "") : String = s.toList match {
-		match Nil => processed
+val specials = List('+', '-', '<', '>')
 
+def rewrite(og: String, token: Char, length: Int) : String = {
+	if (length <= 26) og + token.toString + (length + 64).toChar.toString
+	else og + token.toString + (26 + 64).toChar.toString + token.toString + ((length - 26) + 64).toChar.toString
+}
+
+def combine(s: String) : String = {
+	def helper(s: List[Char], token: Char, length: Int, processed: String = "") : String = s match {
+		case Nil if specials.contains(token)
+			=> rewrite(processed, token, length)
+		case Nil 
+			=> processed
+		case head::tail if specials.contains(head) && head == token
+			=> helper(tail, token, length + 1, processed)
+		case head::tail if specials.contains(head) && token == '#'
+			=> helper(tail, head, 1, processed)
+		case head::tail if specials.contains(head) && head != token
+			=> helper(tail, head, 1, rewrite(processed, token, length))
+		case head::tail if specials.contains(token)
+			=> helper(tail, '#', 0, rewrite(processed, token, length) + head.toString)
+		case head::tail 
+			=> helper(tail, '#', 0, processed + head.toString)
 	}
+	helper(s.toList, s.head, 0)
 }
 
 // testcase
 // combine(load_bff("benchmark.bf"))
 
-def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ???
+def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = {
+	if (pc == pg.length) mem
+    else {
+        pg(pc) match {
+            case '>' => compute3(pg, tb, pc + 2, mp + (pg(pc + 1).toInt - 64), mem)
+            case '<' => compute3(pg, tb, pc + 2, mp - (pg(pc + 1).toInt - 64), mem)
+            case '+' => compute3(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).toInt - 64)))
+            case '-' => compute3(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).toInt - 64)))
+            case '.' => {
+                print(sread(mem, mp).toChar)
+                compute3(pg, tb, pc + 1, mp, mem)
+            }
+            case '[' if sread(mem, mp) == 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
+            case '[' => compute3(pg, tb, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
+            case ']' => compute3(pg, tb, pc + 1, mp, mem)
+			case '0' => compute3(pg, tb, pc + 1, mp, write(mem, mp, 0))
+            case x => compute3(pg, tb, pc + 1, mp, mem)
+        }
+    }
+}
 
 // should call first optimise and then combine on the input string
 //
-def run4(pg: String, m: Mem = Map()) = ???
+def run4(pg: String, m: Mem = Map()) = compute3(combine(optimise(pg)), jtable(pg), 0, 0, m)
 
 
 // testcases
