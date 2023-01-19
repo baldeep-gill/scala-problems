@@ -30,9 +30,9 @@ def jumpRight(prog: String, pc: Int, level: Int) : Int = {
     if (pc == prog.length) pc
     else {
         prog(pc) match {
-            case x if x == '[' => jumpRight(prog, pc + 1, level + 1)
-            case x if (x == ']' && level > 0) => jumpRight(prog, pc + 1, level - 1)
-            case x if x == ']' => pc + 1
+            case '[' => jumpRight(prog, pc + 1, level + 1)
+            case ']' if level > 0 => jumpRight(prog, pc + 1, level - 1)
+            case ']' => pc + 1
             case x => jumpRight(prog, pc + 1, level)
         }
     }
@@ -42,9 +42,9 @@ def jumpLeft(prog: String, pc: Int, level: Int) : Int = {
     if (pc == -1) pc
     else {
         prog(pc) match {
-            case x if x == ']' => jumpLeft(prog, pc - 1, level + 1)
-            case x if (x == '[' && level > 0) => jumpLeft(prog, pc - 1, level - 1)
-            case x if x == '[' => pc + 1
+            case ']' => jumpLeft(prog, pc - 1, level + 1)
+            case '[' if level > 0 => jumpLeft(prog, pc - 1, level - 1)
+            case '[' => pc + 1
             case x => jumpLeft(prog, pc - 1, level)
         }
     }
@@ -67,18 +67,18 @@ def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
     if (pc == prog.length) mem
     else {
         prog(pc) match {
-            case x if x == '>' => compute(prog, pc + 1, mp + 1, mem)
-            case x if x == '<' => compute(prog, pc + 1, mp - 1, mem)
-            case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
-            case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
-            case x if x == '.' => {
+            case '>' => compute(prog, pc + 1, mp + 1, mem)
+            case '<' => compute(prog, pc + 1, mp - 1, mem)
+            case '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case '.' => {
                 print(sread(mem, mp).toChar)
                 compute(prog, pc + 1, mp, mem)
             }
-            case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
-            case x if x == '[' => compute(prog, pc + 1, mp, mem)
-            case x if x == ']' && sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
-            case x if x == ']' => compute(prog, pc + 1, mp, mem)
+            case '[' if sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+            case '[' => compute(prog, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+            case ']' => compute(prog, pc + 1, mp, mem)
             case x => compute(prog, pc + 1, mp, mem)
         }
     }

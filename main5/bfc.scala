@@ -41,18 +41,18 @@ def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
     if (pc == prog.length) mem
     else {
         prog(pc) match {
-            case x if x == '>' => compute(prog, pc + 1, mp + 1, mem)
-            case x if x == '<' => compute(prog, pc + 1, mp - 1, mem)
-            case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
-            case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
-            case x if x == '.' => {
+            case '>' => compute(prog, pc + 1, mp + 1, mem)
+            case '<' => compute(prog, pc + 1, mp - 1, mem)
+            case '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case '.' => {
                 print(sread(mem, mp).toChar)
                 compute(prog, pc + 1, mp, mem)
             }
-            case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
-            case x if x == '[' => compute(prog, pc + 1, mp, mem)
-            case x if x == ']' && sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
-            case x if x == ']' => compute(prog, pc + 1, mp, mem)
+            case '[' if sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+            case '[' => compute(prog, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+            case ']' => compute(prog, pc + 1, mp, mem)
             case x => compute(prog, pc + 1, mp, mem)
         }
     }
@@ -70,9 +70,9 @@ def jumpRight(prog: String, pc: Int, level: Int) : Int = {
     if (pc == prog.length) pc
     else {
         prog(pc) match {
-            case x if x == '[' => jumpRight(prog, pc + 1, level + 1)
-            case x if (x == ']' && level > 0) => jumpRight(prog, pc + 1, level - 1)
-            case x if x == ']' => pc + 1
+            case '[' => jumpRight(prog, pc + 1, level + 1)
+            case ']' if level > 0 => jumpRight(prog, pc + 1, level - 1)
+            case ']' => pc + 1
             case x => jumpRight(prog, pc + 1, level)
         }
     }
@@ -82,9 +82,9 @@ def jumpLeft(prog: String, pc: Int, level: Int) : Int = {
     if (pc == -1) pc
     else {
         prog(pc) match {
-            case x if x == ']' => jumpLeft(prog, pc - 1, level + 1)
-            case x if (x == '[' && level > 0) => jumpLeft(prog, pc - 1, level - 1)
-            case x if x == '[' => pc + 1
+            case ']' => jumpLeft(prog, pc - 1, level + 1)
+            case '[' if level > 0 => jumpLeft(prog, pc - 1, level - 1)
+            case '[' => pc + 1
             case x => jumpLeft(prog, pc - 1, level)
         }
     }
@@ -96,8 +96,8 @@ def jtable(pg: String) : Map[Int, Int] = {
 		if (index == pg.length) table
 		else {
 			pg(index) match {
-				case x if x == '[' => helper(pg, index + 1, table + (index -> jumpRight(pg, index + 1, 0)))
-				case x if x == ']' => helper(pg, index + 1, table + (index -> jumpLeft(pg, index - 1, 0)))
+				case '[' => helper(pg, index + 1, table + (index -> jumpRight(pg, index + 1, 0)))
+				case ']' => helper(pg, index + 1, table + (index -> jumpLeft(pg, index - 1, 0)))
 				case x => helper(pg, index + 1, table)
 			}
 		}
@@ -115,18 +115,18 @@ def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = 
 	if (pc == pg.length) mem
     else {
         pg(pc) match {
-            case x if x == '>' => compute2(pg, tb, pc + 1, mp + 1, mem)
-            case x if x == '<' => compute2(pg, tb, pc + 1, mp - 1, mem)
-            case x if x == '+' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
-            case x if x == '-' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
-            case x if x == '.' => {
+            case '>' => compute2(pg, tb, pc + 1, mp + 1, mem)
+            case '<' => compute2(pg, tb, pc + 1, mp - 1, mem)
+            case '+' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case '-' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case '.' => {
                 print(sread(mem, mp).toChar)
                 compute2(pg, tb, pc + 1, mp, mem)
             }
-            case x if x == '[' && sread(mem, mp) == 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
-            case x if x == '[' => compute2(pg, tb, pc + 1, mp, mem)
-            case x if x == ']' && sread(mem, mp) != 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
-            case x if x == ']' => compute2(pg, tb, pc + 1, mp, mem)
+            case '[' if sread(mem, mp) == 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
+            case '[' => compute2(pg, tb, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
+            case ']' => compute2(pg, tb, pc + 1, mp, mem)
             case x => compute2(pg, tb, pc + 1, mp, mem)
         }
     }
@@ -135,20 +135,43 @@ def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = 
 def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
 
 // testcases
+// time_needed(1, run(load_bff("benchmark.bf")))
+// run1 = 19.941300937
 // time_needed(1, run2(load_bff("benchmark.bf")))
-// run 1 = 19.941300937
-// run 2 = 21.951717765
+// run2 = 21.951717765
+
+// time_needed(1, run(load_bff("sierpinski.bf")))
+// run1 = 0.074708574
 // time_needed(1, run2(load_bff("sierpinski.bf")))
-
-
+// run2 = 0.099770702
 
 // (7) 
 
-def optimise(s: String) : String = ???
+def optimise(s: String) : String = s.replaceAll("""[^<>+\-.\[\]]""", "").replaceAll("""\[-\]""", "0")
 
-def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ???
+def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = {
+	if (pc == pg.length) mem
+    else {
+        pg(pc) match {
+            case '>' => compute3(pg, tb, pc + 1, mp + 1, mem)
+            case '<' => compute3(pg, tb, pc + 1, mp - 1, mem)
+            case '+' => compute3(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case '-' => compute3(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case '.' => {
+                print(sread(mem, mp).toChar)
+                compute3(pg, tb, pc + 1, mp, mem)
+            }
+            case '[' if sread(mem, mp) == 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
+            case '[' => compute3(pg, tb, pc + 1, mp, mem)
+            case ']' if sread(mem, mp) != 0 => compute3(pg, tb, sread(tb, pc), mp, mem)
+            case ']' => compute3(pg, tb, pc + 1, mp, mem)
+			case '0' => compute3(pg, tb, pc + 1, mp, write(mem, mp, 0))
+            case x => compute3(pg, tb, pc + 1, mp, mem)
+        }
+    }
+}
 
-def run3(pg: String, m: Mem = Map()) = ???
+def run3(pg: String, m: Mem = Map()) = compute3(pg, jtable(pg), 0, 0, m)
 
 
 // testcases
@@ -156,12 +179,18 @@ def run3(pg: String, m: Mem = Map()) = ???
 // optimise(load_bff("benchmark.bf"))          // should have inserted 0's
 // optimise(load_bff("mandelbrot.bf")).length  // => 11203
 // 
-// time_needed(1, run3(load_bff("benchmark.bf")))
+// time_needed(1, run3(optimise(load_bff("benchmark.bf"))))
+// run3 = 11.349253759
 
+// (8)
+// A is 65 in ASCII - maybe make offset 'length + 64'
+// + - < >
+def combine(s: String) : String = {
+	def helper(s: String, token: Char, length: Int, processed: String = "") : String = s.toList match {
+		match Nil => processed
 
-
-// (8)  
-def combine(s: String) : String = ???
+	}
+}
 
 // testcase
 // combine(load_bff("benchmark.bf"))
