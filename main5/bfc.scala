@@ -21,10 +21,10 @@ object M5b {
 
 // for timing purposes
 def time_needed[T](n: Int, code: => T) = {
-  val start = System.nanoTime()
-  for (i <- 0 until n) code
-  val end = System.nanoTime()
-  (end - start)/(n * 1.0e9)
+	val start = System.nanoTime()
+	for (i <- 0 until n) code
+	val end = System.nanoTime()
+	(end - start)/(n * 1.0e9)
 }
 
 
@@ -35,9 +35,75 @@ import scala.util._
 
 // ADD YOUR CODE BELOW
 //======================
+//
+
+def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
+    if (pc == prog.length) mem
+    else {
+        prog(pc) match {
+            case x if x == '>' => compute(prog, pc + 1, mp + 1, mem)
+            case x if x == '<' => compute(prog, pc + 1, mp - 1, mem)
+            case x if x == '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case x if x == '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case x if x == '.' => {
+                print(sread(mem, mp).toChar)
+                compute(prog, pc + 1, mp, mem)
+            }
+            case x if x == '[' && sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+            case x if x == '[' => compute(prog, pc + 1, mp, mem)
+            case x if x == ']' && sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+            case x if x == ']' => compute(prog, pc + 1, mp, mem)
+            case x => compute(prog, pc + 1, mp, mem)
+        }
+    }
+}
+
+def run(prog: String, m: Mem = Map()) : Mem = compute(prog, 0, 0, m)
+
+def load_bff(name: String) : String = Try(Source.fromFile(name).mkString).getOrElse("")
+
+def sread(mem: Mem, mp: Int) : Int = mem.getOrElse(mp, 0)
+
+def write(mem: Mem, mp: Int, v: Int) : Mem = mem + (mp -> v)
+
+def jumpRight(prog: String, pc: Int, level: Int) : Int = {
+    if (pc == prog.length) pc
+    else {
+        prog(pc) match {
+            case x if x == '[' => jumpRight(prog, pc + 1, level + 1)
+            case x if (x == ']' && level > 0) => jumpRight(prog, pc + 1, level - 1)
+            case x if x == ']' => pc + 1
+            case x => jumpRight(prog, pc + 1, level)
+        }
+    }
+}
+
+def jumpLeft(prog: String, pc: Int, level: Int) : Int = {
+    if (pc == -1) pc
+    else {
+        prog(pc) match {
+            case x if x == ']' => jumpLeft(prog, pc - 1, level + 1)
+            case x if (x == '[' && level > 0) => jumpLeft(prog, pc - 1, level - 1)
+            case x if x == '[' => pc + 1
+            case x => jumpLeft(prog, pc - 1, level)
+        }
+    }
+}
 
 // (6) 
-def jtable(pg: String) : Map[Int, Int] = ???
+def jtable(pg: String) : Map[Int, Int] = {
+	def helper(pg:String, index: Int, table: Map[Int, Int]) : Map[Int, Int] = {
+		if (index == pg.length) table
+		else {
+			pg(index) match {
+				case x if x == '[' => helper(pg, index + 1, table + (index -> jumpRight(pg, index + 1, 0)))
+				case x if x == ']' => helper(pg, index + 1, table + (index -> jumpLeft(pg, index - 1, 0)))
+				case x => helper(pg, index + 1, table)
+			}
+		}
+	}
+	helper(pg, 0, Map[Int, Int]())
+}
 
 // testcase
 //
@@ -45,11 +111,33 @@ def jtable(pg: String) : Map[Int, Int] = ???
 // =>  Map(69 -> 61, 5 -> 20, 60 -> 70, 27 -> 44, 43 -> 28, 19 -> 6)
 
 
-def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ???
-def run2(pg: String, m: Mem = Map()) = ???
+def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = {
+	if (pc == pg.length) mem
+    else {
+        pg(pc) match {
+            case x if x == '>' => compute2(pg, tb, pc + 1, mp + 1, mem)
+            case x if x == '<' => compute2(pg, tb, pc + 1, mp - 1, mem)
+            case x if x == '+' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+            case x if x == '-' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+            case x if x == '.' => {
+                print(sread(mem, mp).toChar)
+                compute2(pg, tb, pc + 1, mp, mem)
+            }
+            case x if x == '[' && sread(mem, mp) == 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
+            case x if x == '[' => compute2(pg, tb, pc + 1, mp, mem)
+            case x if x == ']' && sread(mem, mp) != 0 => compute2(pg, tb, sread(tb, pc), mp, mem)
+            case x if x == ']' => compute2(pg, tb, pc + 1, mp, mem)
+            case x => compute2(pg, tb, pc + 1, mp, mem)
+        }
+    }
+}
+
+def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
 
 // testcases
 // time_needed(1, run2(load_bff("benchmark.bf")))
+// run 1 = 19.941300937
+// run 2 = 21.951717765
 // time_needed(1, run2(load_bff("sierpinski.bf")))
 
 
