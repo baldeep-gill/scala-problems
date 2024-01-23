@@ -1,6 +1,3 @@
-# assignment2022scala - Main 3
+# Regex Matcher
 
-* deadline: 19 January, 5pm
-* [coursework description](https://nms.kcl.ac.uk/christian.urban/main_cw03.pdf)
-* reference jar:
-      [re.jar](https://nms.kcl.ac.uk/christian.urban/re.jar)
+This code implements a basic version of defining regular expressions and some of Brzozowski's algorithms in order to match said regular expressions

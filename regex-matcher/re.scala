@@ -50,10 +50,6 @@ implicit def stringOps (s: String) = new {
 // SEQ(CHAR('a'), CHAR('b')) 
 // val sreg : Rexp = "a" ~ "b"
 
-
-// ADD YOUR CODE BELOW
-//======================
-
 // (1)
 def nullable (r: Rexp) : Boolean = r match {
 	case ZERO => false
@@ -207,14 +203,3 @@ simp(Iterator.iterate(ONE:Rexp)(r => SEQ(r, ONE | ONE)).drop(50).next()) == ONE
 */
 
 }
-
-
-
-
-
-
-// This template code is subject to copyright 
-// by King's College London, 2022. Do not 
-// make the template code public in any shape 
-// or form, and do not exchange it with other 
-// students under any circumstance.
