@@ -4,21 +4,6 @@
 
 object M5b {
 
-// !!! Copy any function you need from file bf.scala !!!
-//
-// If you need any auxiliary function, feel free to 
-// implement it, but do not make any changes to the
-// templates below.
-
-
-// DEBUGGING INFORMATION FOR COMPILERS!!!
-//
-// Compiler, even real ones, are fiendishly difficult to get
-// to produce correct code. One way to debug them is to run
-// example programs ``unoptimised''; and then optimised. Does
-// the optimised version still produce the same result?
-
-
 // for timing purposes
 def time_needed[T](n: Int, code: => T) = {
 	val start = System.nanoTime()
@@ -32,10 +17,6 @@ type Mem = Map[Int, Int]
 
 import io.Source
 import scala.util._
-
-// ADD YOUR CODE BELOW
-//======================
-//
 
 def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = {
     if (pc == prog.length) mem
@@ -250,13 +231,3 @@ def run4(pg: String, m: Mem = Map()) = compute4(combine(optimise(pg)), jtable(co
 
 
 }
-
-
-
-
-
-// This template code is subject to copyright 
-// by King's College London, 2022. Do not 
-// make the template code public in any shape 
-// or form, and do not exchange it with other 
-// students under any circumstance.
