@@ -1,7 +1,3 @@
-# assignment2022scala - Core 3
+# Shunting Yard Algorithms
 
-* deadline: 19 January, 5pm
-* [coursework description](https://nms.kcl.ac.uk/christian.urban/core_cw03.pdf)
-* reference jar:
-    [postfix.jar](https://nms.kcl.ac.uk/christian.urban/postfix.jar),
-    [postfix2.jar](https://nms.kcl.ac.uk/christian.urban/postfix2.jar)
+Implementation of the shunting yard algorithms by Dijkstra. syard.scala includes associativity for operators.
