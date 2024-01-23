@@ -7,10 +7,6 @@ object M2 {
 import io.Source
 import scala.util._
 
-// ADD YOUR CODE BELOW
-//======================
-
-
 //(1)
 def get_wordle_list(url: String) : List[String] = {
     Try(Source.fromURL(url).getLines().toList).getOrElse(Nil)
@@ -134,14 +130,3 @@ def ranked_evil(secrets: List[String], word: String) : List[String] = {
 
 
 }
-
-
-
-
-
-
-// This template code is subject to copyright 
-// by King's College London, 2022. Do not 
-// make the template code public in any shape 
-// or form, and do not exchange it with other 
-// students under any circumstance.
