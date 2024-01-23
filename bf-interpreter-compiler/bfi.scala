@@ -12,9 +12,6 @@ type Mem = Map[Int, Int]
 import io.Source
 import scala.util._
 
-// ADD YOUR CODE BELOW
-//======================
-
 // (1)
 def load_bff(name: String) : String = Try(Source.fromFile(name).mkString).getOrElse("")
 
@@ -183,13 +180,3 @@ def generate(msg: List[Char]) : String = msg.map(x => "+" * x.toInt + ".[-]").mk
 //run(load_bff("collatz.bf"))
 
 }
-
-
-
-
-
-// This template code is subject to copyright 
-// by King's College London, 2022. Do not 
-// make the template code public in any shape 
-// or form, and do not exchange it with other 
-// students under any circumstance.
